@@ -1,6 +1,6 @@
 <% note ||= order.notes.new
-   add_note_msg = t('.add_note_to_order_for_user')
-   add_note_msg = t('.add_note_to_order_for_admin') unless current_user == order.user  -%>
+   add_note_msg = t('.add_note_to_order_for_admin')
+   add_note_msg = t('.add_note_to_order_for_user') unless current_user == order.user  -%>
 
 <div class="note-form" id="note-form-for-<%= order.id -%>">
 
