@@ -1,0 +1,11 @@
+<% @button_text = t("line_items.new.confirm") 
+   @title = t("line_items.new.confirm_order")
+-%>
+
+<h1><%= @title -%></h1>
+
+<% form_for([@purchasable_item, @line_item]) do |f| %>
+
+<%= render :partial => f -%>
+
+<% end %>

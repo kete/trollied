@@ -1,0 +1,13 @@
+<% @title = t("orders.index.title") -%>
+
+<h1><%= @title -%></h1>
+<%= state_links -%>
+
+<% if @orders.size > 0 -%>
+
+  <%= render :partial => 'orders/order', :collection => @orders, :locals => { :trolley => @trolley, :status => @state } -%>
+
+<% else -%>
+  <p><%= t("orders.index.no_orders") %></p>
+<% end -%>
+

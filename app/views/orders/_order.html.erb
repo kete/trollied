@@ -1,0 +1,42 @@
+<% trolley ||= order.trolley -%>
+
+<h2><%= t("orders.order.#{status}") -%></h2>
+
+<table class="order">
+  <tr>
+    <th abbr="Line Item"><%= t 'orders.order.purchasable_item_description' %></th>
+  </tr>
+
+  <%= render :partial => 'line_items/line_item', :collection => order.line_items, :locals => { :order => order, :trolley => trolley } -%>
+
+  <% if order.current? -%>
+  <tr>
+    <td><%= button_to(t('orders.order.checkout'),
+	    { :controller => :orders,
+      :action => :checkout,
+      :id => order },
+      :confirm => t('orders.order.are_you_sure'),
+      :class => 'order-button') -%></td>
+
+    <td><%= button_to(t('orders.order.clear_all'),
+	    { :controller => :orders,
+      :action => :destroy,
+      :id => order },
+      :confirm => t('orders.order.are_you_sure'),
+      :method => 'delete',
+      :class => 'order-button') -%></td>
+  </tr>
+  <% end -%>
+
+  <% if order.in_process? -%>
+  <tr>
+    <td><%= button_to(t('orders.order.cancel'),
+	    { :controller => :orders,
+      :action => :cancel,
+      :id => order },
+      :confirm => t('orders.order.are_you_sure'),
+      :class => 'order-button') -%></td>
+  </tr>
+  <% end -%>
+
+</table>

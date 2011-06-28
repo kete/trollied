@@ -1,0 +1,12 @@
+<tr>
+  <td><%= link_to line_item.description_for_purchasing, line_item.purchasable_item -%></td>
+  <% unless %w(in_process user_review completed ready).include?(order.workflow_state) -%>
+  <td>
+    <%= link_to t('line_items.line_item.delete'), { :controller => :orders,
+    :action => :destroy,
+    :id => line_item,
+    :order_id => order,
+    :trolley_id => trolley },
+    :confirm => t('line_items.line_item.are_you_sure'), :method => :delete %></td>
+  <% end -%>
+</tr>

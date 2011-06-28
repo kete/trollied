@@ -1,0 +1,11 @@
+<% note ||= order.notes.new -%>
+
+<div class="note-form" id="note-form-for-<%= order.id -%>">
+<h4><%= t('.add_note_to_order') -%></h4>
+
+<% form_for([order, note]) do |f| %>
+
+<%= render :partial => 'notes/form', :locals => { :form => f, :user => current_user } -%>
+
+<% end %>
+</div>

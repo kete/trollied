@@ -1,0 +1,13 @@
+<div class="date-form">
+ <% form_tag do %>
+   <%= hidden_field_tag 'state', @state  if @state %>
+   <%= hidden_field_tag 'user', @user  if @user %>
+   <%= hidden_field_tag 'trolley_id', @trolley.id if @trolley %>
+
+   <label><%= t '.from'  -%></label>
+   <%= text_field_tag 'from', @from %>
+   <label><%= t '.until' -%></label>
+   <%= text_field_tag 'until', @until %>
+   <%= submit_tag t '.update' %>
+ <% end %>
+</div>

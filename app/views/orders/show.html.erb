@@ -1,0 +1,14 @@
+<%
+   if current_user == @order.user
+     @title = t(".your_order")
+   else
+   # TODO: interpolate user name
+   # (means name method has to be implemented for user model)
+     @title = t(".for_user_title", :name => @order.user.trolley_user_display_name)
+   end
+-%>
+
+<h1><%= @title -%></h1>
+
+<%= render @order -%>
+

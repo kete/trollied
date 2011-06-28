@@ -1,0 +1,54 @@
+en:
+  line_items:
+    new:
+      confirm: "Confirm"
+      confirm_order: "Confirm Order"
+    edit:
+      update: "Update"
+    form:
+    helpers:
+    index:
+      are_you_sure: "Are you sure?"
+      back: "Back"
+      delete: "Delete"
+      edit: "Edit"
+      new: "New Line Item"
+    show:
+      edit: "Edit"
+      translations: "Translations"
+    controllers:
+      created: "Added to order"
+      updated: "Updated in order"
+      deleted: "Deleted from order"
+  purchase_orders:
+    new:
+      create: "Create"
+    edit:
+      update: "Update"
+    form:
+    helpers:
+    index:
+      are_you_sure: "Are you sure?"
+      back: "Back"
+      delete: "Delete"
+      edit: "Edit"
+      new: "New Purchase Order"
+    show:
+      edit: "Edit"
+    controllers:
+      created: "Created order"
+      updated: "Updated order"
+      deleted: "Deleted order"
+  trolleys:
+    helpers:
+    pending:
+      purchasable_item_description: "Description"
+      clear_all: "Clear all"
+      clear_are_you_sure: "Are you sure?"
+      none_pending: "No orders pending."
+    show:
+      your_title: "Your Cart"
+      for_user_title: "Cart"
+    controllers:
+  gets_trollied_helper:
+    add_to_cart: "+ Add to cart"

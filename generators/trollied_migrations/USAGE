@@ -1,0 +1,2 @@
+Description:
+	Generates the migrations necessary for using the trollied gem in your Ruby on Rails application. Namely trolley, purchase_order, and line item.

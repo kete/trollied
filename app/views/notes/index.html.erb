@@ -1,0 +1,13 @@
+<% @title = t(".title") -%>
+
+<h1><%= @title -%></h1>
+
+<% if @notes.size > 0 -%>
+  <h2><%= t(".notes") -%></h2>
+
+  <%= render @notes -%>
+
+<% else -%>
+  <p><%= t(".no_notes") %></p>
+<% end -%>
+
