@@ -37,7 +37,7 @@ en:
       said: "said"
     new:
       add_note_to_order_for_admin: "Add a note about this order for staff."
-      add_note_to_order_for_user: "Add a note about this order for the order's owner."
+      add_note_to_order_for_user: "Add a note about this order for the owner."
   orders:
     edit:
       update: "Update"
