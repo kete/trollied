@@ -1,4 +1,9 @@
 en:
+  base:
+    cart: "cart"
+    shopping_cart: "shopping cart"
+  line_item:
+    already_in_order: "has already been placed"
   line_items:
     new:
       confirm: "Confirm"
@@ -13,6 +18,9 @@ en:
       delete: "Delete"
       edit: "Edit"
       new: "New Line Item"
+    line_item:
+      delete: "Delete"
+      are_you_sure: "Are you sure?"
     show:
       edit: "Edit"
       translations: "Translations"
@@ -20,35 +28,88 @@ en:
       created: "Added to order"
       updated: "Updated in order"
       deleted: "Deleted from order"
-  purchase_orders:
+  notes:
+    controllers:
+      created: "Note created."
+    form:
+      send: "Send"
+    note:
+      said: "said"
     new:
-      create: "Create"
+      add_note_to_order_for_admin: "Add a note about this order for staff."
+      add_note_to_order_for_user: "Add a note about this order for the order's owner."
+  orders:
     edit:
       update: "Update"
+    date_pickers:
+      from: "From:"
+      until: "Until:"
+      update: "Update wth Date Filter"
     form:
     helpers:
+      by: "by"
+      cancelled_orders: "Cancelled Orders"
+      clear_params: "clear extra settings"
+      completed_orders: "Completed Orders"
+      current_orders: "Current Orders"
+      from: "from"
+      in_process_orders: "Orders Awaiting processing"
+      ready_orders: "Ready Orders"
+      until: "until"
+      user_review_orders: "Orders needing user attention"
     index:
       are_you_sure: "Are you sure?"
       back: "Back"
+      cancelled: "cancelled"
+      completed: "completed"
+      current: "current"
       delete: "Delete"
       edit: "Edit"
-      new: "New Purchase Order"
+      filters: "Filters:"
+      in_process: "Awaiting processing"
+      new: "New Order"
+      no_orders: "No orders match your criteria."
+      ready: "ready"
+      title: "Orders"
+      user_review: "needing user attention"
+    new:
+      create: "Create"
+    order:
+      are_you_sure: "Are you sure?"
+      cancel: "Cancel"
+      checkout: "Checkout"
+      destroy: "Clear all"
+      finish: "Mark as completed"
+      fulfilled_without_acceptance: "Mark as ready"
+      order_notes: "Notes for this order:"
+      purchasable_item_description: "Item"
+      user: "User:"
     show:
-      edit: "Edit"
+      your_title: "Your Order"
+      for_user_title: "Order for {{name}}"
     controllers:
+      change_to_cancel: "Order Cancelled"
+      change_to_checkout: "Order Checked Out"
+      change_to_finish: "Order Completed"
+      change_to_fulfilled_without_acceptance: "Order Ready"
       created: "Created order"
       updated: "Updated order"
       deleted: "Deleted order"
+      checkout: "Your order has now been placed."
   trolleys:
     helpers:
-    pending:
-      purchasable_item_description: "Description"
-      clear_all: "Clear all"
-      clear_are_you_sure: "Are you sure?"
+    orders:
+      cancelled: "Cancelled Orders"
+      completed: "Completed Orders"
+      current: "Current Orders"
+      in_process: "Awaiting processing"
       none_pending: "No orders pending."
+      ready: "Ready Orders"
+      user_review: "Orders needing your attention"
     show:
       your_title: "Your Cart"
-      for_user_title: "Cart"
+      for_user_title: "Cart for {{name}}"
     controllers:
   gets_trollied_helper:
-    add_to_cart: "+ Add to cart"
+    add_to_trolley: "+ Add to cart"
+    in_trolley: "Previously added to cart"

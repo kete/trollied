@@ -1,12 +1,21 @@
 <% @title = t("orders.index.title") -%>
 
 <h1><%= @title -%></h1>
+
+<% if Order.count > 0 -%>
+  <h3><%= t '.filters' -%></h3>
+<% end -%>
+
 <%= state_links -%>
+<%= render :partial => 'date_pickers' -%>
 
 <% if @orders.size > 0 -%>
 
-  <%= render :partial => 'orders/order', :collection => @orders, :locals => { :trolley => @trolley, :status => @state } -%>
+  <h2><%= orders_state_headline -%><%= clear_extra_params -%></h2>
 
+  <%= render :partial => 'orders/order', :collection => @orders, :locals => { :trolley => @trolley, :status => @state } -%>
+  
+  <div id="prev-next"><%= will_paginate @orders, :params => params %></div>
 <% else -%>
   <p><%= t("orders.index.no_orders") %></p>
 <% end -%>

@@ -49,6 +49,6 @@ class ActiveSupport::TestCase
 end
 
 def assert_purchasable_item_matches
-  assert @purchase_order.line_items.size == 1
-  assert_equal @item, @purchase_order.line_items.first.purchasable_item
+  assert @order.line_items.size == 1
+  assert_equal @item, @order.line_items.first.purchasable_item
 end

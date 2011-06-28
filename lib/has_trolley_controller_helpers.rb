@@ -1,9 +1,10 @@
 module HasTrolleyControllerHelpers
-  unless included_modules.include? HasTrolleyControllerHelpers
-    def self.included(klass)
-      klass.send :helper_method, :url_for_trolley
-    end
-
+  def self.included(klass)
+    klass.send :helper_method, :url_for_trolley
+    klass.send :include, UrlFor
+  end
+  
+  module UrlFor
     # expects user in options or @user or trolley being set
     def url_for_trolley(options = { })
       user = options[:user] || @user
@@ -13,19 +14,30 @@ module HasTrolleyControllerHelpers
 
       # TODO: Hack, not sure if this is 2.3.5 bug or my ignorance
       # but url_for returns marshalled trolley, in addition to correct url
-      url = url_for([user, trolley]).split(".%23%")[0]
+      url = url_for(:user_id => user.id,
+                    :controller => :trolleys,
+                    :action => :show).split(".%23%")[0]
     end
 
-    # expects purchase_order
+    # expects order
     # either as instance variables or in options
-    def url_for_purchase_order(options = { })
+    def url_for_order(options = { })
       trolley = options[:trolley] || @trolley
-      trolley = @purchase_order.trolley if @purchase_order && trolley.blank?
+      trolley = @order.trolley if @order && trolley.blank?
 
-      purchase_order = options[:purchase_order] || @purchase_order || trolley.purchase_order
+      order = options[:order] || @order || trolley.selected_order
       
-      url_for [trolley.user, trolley, purchase_order]
+      url_for [trolley.user, trolley, order]
     end
 
+    def url_for_order_or_trolley
+      raise unless @order
+
+      if @order.user == current_user
+        url_for_trolley :trolley => @order.trolley
+      else
+        url_for_order
+      end
+    end
   end
 end

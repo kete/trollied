@@ -1,7 +1,8 @@
-class CreatePurchaseOrders < ActiveRecord::Migration
+class CreateOrders < ActiveRecord::Migration
   def self.up
-    create_table :purchase_orders do |t|
+    create_table :orders do |t|
       t.integer :trolley_id, :null => false
+      t.string :workflow_state, :default => 'current', :null => false
 
       t.timestamps
     end
@@ -9,6 +10,6 @@ class CreatePurchaseOrders < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :purchase_orders
+    drop_table :orders
   end
 end

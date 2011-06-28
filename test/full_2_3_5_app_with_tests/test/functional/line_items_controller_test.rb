@@ -30,9 +30,9 @@ class LineItemsControllerTest < ActionController::TestCase
 
     context "when there is an existing line_item" do
       setup do
-        @purchase_order = @user.correct_purchase_order(@item)
+        @order = @user.correct_order(@item)
 
-        @line_item_1 = @item.line_items.create(:purchase_order => @purchase_order)
+        @line_item_1 = @item.line_items.create(:order => @order)
       end
 
       should "get index with a line_item" do
@@ -51,16 +51,16 @@ class LineItemsControllerTest < ActionController::TestCase
       end
 
       should "update line_item" do
-        put :update, :id => @line_item_1.id, :item_id => @item.id, :line_item => { :purchase_order => Factory.create(:purchase_order) }
+        put :update, :id => @line_item_1.id, :item_id => @item.id, :line_item => { :order => Factory.create(:order) }
         assert_redirected_to :controller => 'trolleys', :action => 'show', :user_id => @user.id
       end
 
       should "destroy line_item" do
-        assert_difference('Line_Item.count', -1) do
-          delete :destroy, :id => @line_item_1.id
+        assert_difference('LineItem.count', -1) do
+          delete :destroy, :order_id => @order.id, :id => @line_item_1.id
         end
 
-        assert_redirected_to :controller => 'items', :action => 'show', :id => @item.id
+        assert_redirected_to :action => 'index', :order_id => @order.id
       end
     end
   end

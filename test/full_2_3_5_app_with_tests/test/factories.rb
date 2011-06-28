@@ -11,6 +11,12 @@ Factory.define :trolley do |f|
   f.association :user
 end
 
-Factory.define :purchase_order do |f|
+Factory.define :order do |f|
   f.association :trolley
+end
+
+Factory.define :note do |f|
+  f.body "a test body"
+  f.association :order
+  f.association :user
 end

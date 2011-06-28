@@ -1,10 +1,8 @@
-members = Hash.new
-event_objects = Order.workflow_spec.states.values.collect &:events
-events = event_objects.collect { |h| h.keys}.flatten.compact
-events.each do |name|
-  members[name.to_sym] = :post
+members = Order.workflow_event_names.inject(Hash.new) do |hash, event_name|
+  hash[event_name.to_sym] = :post
+  hash
 end
 
 ActionController::Routing::Routes.draw do |map|
-  map.resources :orders, :member => members, :except => [:new, :create], :has_many => :line_items
+  map.resources :orders, :member => members, :except => [:new, :create], :has_many => :line_items, :has_many => :notes
 end

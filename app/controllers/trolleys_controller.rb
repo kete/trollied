@@ -6,7 +6,7 @@ class TrolleysController < ApplicationController
   before_filter :get_trollied_user
   before_filter :get_trolley
 
-  # list purchase_orders
+  # list orders
   def show
     respond_to do |format|
       format.html # index.html.erb

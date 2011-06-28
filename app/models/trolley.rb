@@ -1,26 +1,51 @@
 class Trolley < ActiveRecord::Base
   belongs_to :user
-  has_many :purchase_orders
+  has_many :orders
 
-  # get specified purchase_order (or first, if not specified)
+  # get specified order (or first, if not specified)
   # or create one if none exists
-  def purchase_order(position = 1)
+  def selected_order(position = 1)
     index = position - 1
     
-    purchase_orders[index] || purchase_orders.create!
+    orders[index] || orders.create!
   end
 
   # TODO: STUB: implement way to determine
-  # correct purchase_order given an purchasable_item
-  def correct_purchase_order(purchasable_item)
-    purchase_order
+  # correct order given an purchasable_item
+  def correct_order(purchasable_item)
+    orders.with_state_current.first || orders.create!
   end
 
   # add item or array of items to trolley
   def add(*items_to_order)
-    # get purchase_order
+    # get order
     items_to_order.each do |item|
-      purchase_order.add(item)
+      selected_order.add(item)
     end
   end
+
+  # do any of this trolley's orders contain the purchasable_item?
+  # TODO: when status is added to orders, limit by option for checking status
+  def contains?(purchasable_item, state = nil)
+    within_orders = state ? orders.send("with_state_#{state}") : orders
+
+    these_contain?(within_orders, purchasable_item)
+  end
+
+  def these_contain?(within_orders, purchasable_item)
+    return false if within_orders.size == 0
+
+    within_orders.each do |order|
+      return true if order.contains?(purchasable_item)
+    end
+    false
+  end
+
+  # active is defined as either current or in_process order
+  def has_active_order_for?(purchasable_item)
+    within_orders = orders.with_state_current + orders.with_state_in_process + orders.with_state_ready
+
+    these_contain?(within_orders, purchasable_item)
+  end
+
 end

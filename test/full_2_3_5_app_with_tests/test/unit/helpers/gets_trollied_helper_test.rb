@@ -2,6 +2,8 @@
 require 'test_helper'
 
 class GetsTrolliedHelperTest < ActionView::TestCase
+  include HasTrolleyControllerHelpers::UrlFor
+
   context "Helpers for stuff that gets trollied" do
     setup do
       @item = Factory.create(:item, :label => "a label")

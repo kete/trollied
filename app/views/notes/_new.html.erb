@@ -1,7 +1,10 @@
-<% note ||= order.notes.new -%>
+<% note ||= order.notes.new
+   add_note_msg = t('.add_note_to_order_for_user')
+   add_note_msg = t('.add_note_to_order_for_admin') unless current_user == order.user  -%>
 
 <div class="note-form" id="note-form-for-<%= order.id -%>">
-<h4><%= t('.add_note_to_order') -%></h4>
+
+<h4><%= add_note_msg -%></h4>
 
 <% form_for([order, note]) do |f| %>
 

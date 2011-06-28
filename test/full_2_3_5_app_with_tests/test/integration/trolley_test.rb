@@ -37,9 +37,9 @@ class TrolleyTest < ActionController::IntegrationTest
 
         should "have a clear all button" do
           visit "/user/#{@user.id}/trolley"
-          assert_have_tag "input", :type => "submit", :value => I18n.t('orders.order.clear_all')
+          assert_have_tag "input", :type => "submit", :value => I18n.t('orders.order.destroy')
 
-          click_button I18n.t('orders.order.clear_all')
+          click_button I18n.t('orders.order.destroy')
           
           assert_have_tag "p", :content => I18n.t('trolleys.orders.none_pending')
         end

@@ -1,123 +1,210 @@
-class PurchaseOrdersController < ApplicationController
+class OrdersController < ApplicationController
   # Prevents the following error from showing up, common in Rails engines
   # A copy of ApplicationController has been removed from the module tree but is still active!
   unloadable
 
+  before_filter :get_user, :only => [:index]
   before_filter :get_trolley
-  before_filter :get_purchase_order, :except => [:new, :index, :create]
+  before_filter :get_order, :except => [:new, :index, :create]
 
-  # GET /purchase_orders
-  # GET /purchase_orders.xml
-  def index
-    if @trolley
-      @purchase_orders = @trolley.purchase_orders
-    else
-      # site wide
-      # TODO: add permission check of admin mechanism
-      # TODO: add pagination
-      @purchase_orders = nil
-    end
+  # GET /orders
+  # GET /orders.xml
+   def index
+     # TODO: add permission check of admin mechanism
 
-    respond_to do |format|
-      format.html # index.html.erb
-      # format.xml  { render :xml => @line_items }
-    end
-  end
+     # 'all' will return what you expect, i.e. orders for all states
+     # other valid values are specific state names
+     # default should be set depending on rights of current_user
+     # we'll start with an assumption of staff view
+     # as a user's trolley lists their own current orders by default
+     @state = params[:state].present? ? params[:state] : 'in_process'
+     params[:state] = @state
 
-  # GET /purchase_orders/1
-  # GET /purchase_orders/1.xml
-  def show
-    respond_to do |format|
-      format.html # show.html.erb
-      # format.xml  { render :xml => @line_item }
-    end
-  end
+     @conditions = set_up_conditions_based_on_params
 
-  # GET /purchase_orders/new
-  # GET /purchase_orders/new.xml
-  def new
-    @trolley ||= current_user ? current_user.trolley : raise # trolley not found
-    
-    @trolley.purchase_orders.new
+     options = { :page => params[:page],
+       :per_page => 5,
+       :conditions => @conditions }
 
-    respond_to do |format|
-      format.html # new.html.erb
-      # format.js { render :layout => false } # needs to come after html for IE to work
-      # format.xml  { render :xml => @line_item }
-    end
-  end
+     @orders = Order.paginate(options)
 
-  # GET /purchase_orders/1/edit
-  def edit
-  end
+     respond_to do |format|
+       format.html # index.html.erb
+       # format.xml  { render :xml => @line_items }
+     end
+   end
 
-  # POST /purchase_orders
-  # POST /purchase_orders.xml
-  def create
-    purchase_order_params = params[:purchase_order] || params[:trolley_purchase_order] || Hash.new
+   # GET /orders/1
+   # GET /orders/1.xml
+   def show
+     respond_to do |format|
+       format.html # show.html.erb
+       # format.xml  { render :xml => @line_item }
+     end
+   end
 
-    @purchase_order = @trolley.purchase_orders.new(purchase_order_params) 
+   # GET /orders/new
+   # GET /orders/new.xml
+   def new
+     @trolley ||= current_user ? current_user.trolley : raise # trolley not found
 
-    respond_to do |format|
-      if @purchase_order.save
-        flash[:notice] = t('purchase_orders.controllers.created')
-        # we redirect to purchasable_item object in the new purchasable_item version
-        # assumes controller name is tableized version of class
-        format.html { redirect_to url_for_trolley }
-        # TODO: adjust :location accordingly for being a nested route
-        # format.xml  { render :xml => @line_item, :status => :created, :location => @line_item }
-      else
-        format.html { render :action => "new" }
-        # format.xml  { render :xml => @line_item.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+     @trolley.orders.new
 
-  # PUT /purchase_orders/1
-  # PUT /purchase_orders/1.xml
-  def update
-    respond_to do |format|
-      purchase_order_params = params[:purchase_order] || params[:trolley_purchase_order]
-      if @purchase_order.update_attributes(purchase_order_params)
-        flash[:notice] = t('purchase_orders.controllers.updated')
-        format.html { redirect_to @purchase_order }
-        # format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        # format.xml  { render :xml => @line_item.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+     respond_to do |format|
+       format.html # new.html.erb
+       # format.js { render :layout => false } # needs to come after html for IE to work
+       # format.xml  { render :xml => @line_item }
+     end
+   end
 
-  # DELETE /purchase_orders/1
-  # DELETE /purchase_orders/1.xml
-  def destroy
-    return_to = @trolley ? url_for_trolley : { :action => :index }
-    @purchase_order.destroy
+   # GET /orders/1/edit
+   def edit
+   end
 
-    respond_to do |format|
-      flash[:notice] = t('purchase_orders.controllers.deleted')
-      format.html { redirect_to return_to }
-      # format.xml  { head :ok }
-    end
-  end
+   # POST /orders
+   # POST /orders.xml
+   def create
+     order_params = params[:order] || params[:trolley_order] || Hash.new
 
-  protected
-  # accepts line_item.locale or line_item.id for lookup
-  # line_item.locale should be unique within the scope of @purchasable_item
-  def get_purchase_order
-    @purchase_order = if @trolley
-                        if params[:id].present?
-                          @trolley.purchase_orders.find(params[:id])
-                        else
-                          @trolley.purchase_order
-                        end
-                      elsif params[:id].present?
-                        PurchaseOrder.find(params[:id])
-                      end
-  end
+     @order = @trolley.orders.new(order_params) 
 
-  def get_trolley
-    @trolley = params[:trolley_id].present? ? Trolley.find(params[:trolley_id]) : nil
-  end
+     respond_to do |format|
+       if @order.save
+         flash[:notice] = t('orders.controllers.created')
+         # we redirect to purchasable_item object in the new purchasable_item version
+         # assumes controller name is tableized version of class
+         format.html { redirect_to url_for_trolley }
+         # TODO: adjust :location accordingly for being a nested route
+         # format.xml  { render :xml => @line_item, :status => :created, :location => @line_item }
+       else
+         format.html { render :action => "new" }
+         # format.xml  { render :xml => @line_item.errors, :status => :unprocessable_entity }
+       end
+     end
+   end
+
+   # PUT /orders/1
+   # PUT /orders/1.xml
+   def update
+     respond_to do |format|
+       order_params = params[:order] || params[:trolley_order]
+       if @order.update_attributes(order_params)
+         flash[:notice] = t('orders.controllers.updated')
+         format.html { redirect_to @order }
+         # format.xml  { head :ok }
+       else
+         format.html { render :action => "edit" }
+         # format.xml  { render :xml => @line_item.errors, :status => :unprocessable_entity }
+       end
+     end
+   end
+
+   # DELETE /orders/1
+   # DELETE /orders/1.xml
+   def destroy
+     @trolley ||= @order.trolley
+     return_to = @trolley ? url_for_trolley : { :action => :index }
+
+     @order.destroy
+
+     respond_to do |format|
+       flash[:notice] = t('orders.controllers.deleted')
+       format.html { redirect_to return_to }
+       # format.xml  { head :ok }
+     end
+   end
+
+   # additional actions that correspond to order_status events
+   %w(checkout cancel fulfilled_without_acceptance finish).each do |event|
+     code = Proc.new { 
+       @order.send("#{event}!")
+       @trolley ||= @order.trolley
+
+       flash[:notice] = t("orders.controllers.change_to_#{event}")
+       redirect_to url_for_trolley
+     }
+
+     define_method(event, &code)
+   end
+
+   private
+   # accepts line_item.locale or line_item.id for lookup
+   # line_item.locale should be unique within the scope of @purchasable_item
+   def get_order
+     @order = if @trolley
+                         if params[:id].present?
+                           @trolley.orders.find(params[:id])
+                         else
+                           @trolley.selected_order
+                         end
+                       elsif params[:id].present?
+                         Order.find(params[:id])
+                       end
+   end
+
+   def get_trolley
+     @trolley = if params[:trolley_id].present?
+                  Trolley.find(params[:trolley_id])
+                elsif @user
+                  @user.trolley
+                end
+   end
+
+   def get_user
+     @user = if params[:user_id].present? || params[:user].present?
+               id = params[:user_id].present? ? params[:user_id] : params[:user]
+               User.find(id)
+             end
+   end
+
+   # validate and add them as conditions
+   def add_date_clause_and_var_for(name, clauses_array, clauses_hash)
+     if params[name].present?
+       value = params[name]
+       var_name = "@" + name.to_s
+
+       instance_variable_set(var_name, value)
+
+       begin
+         Date.parse(value)
+         operator = ">="
+         operator = "<=" if name == :until
+
+         clauses_array << "created_at #{operator} :#{name}"
+         clauses_hash[name] = value
+       rescue
+         instance_variable_set(var_name, nil)
+       end
+     end
+   end
+
+   def default_conditions_hash
+     { :workflow_state => @state }
+   end
+
+   def set_up_conditions_based_on_params
+     conditions_clauses = Array.new
+     conditions_hash = default_conditions_hash
+
+     # handle date range
+     add_date_clause_and_var_for(:from, conditions_clauses, conditions_hash)
+     add_date_clause_and_var_for(:until, conditions_clauses, conditions_hash)
+
+     # user is a little funnier because trolley is what has the direct user relation
+     # so trolley is really what will give us a user's orders
+     conditions_hash[:trolley_id] = @trolley.id if @trolley
+
+     if conditions_clauses.size > 0
+       conditions_hash.each do |k,v|
+         conditions_clauses << "#{k} = :#{k}" unless conditions_clauses.join.include?(':' + k.to_s)
+       end
+     end
+
+     conditions = if conditions_clauses.size == 0
+                    conditions_hash
+                  else
+                    [conditions_clauses.join(" AND "), conditions_hash]
+                  end
+     
+   end
 end

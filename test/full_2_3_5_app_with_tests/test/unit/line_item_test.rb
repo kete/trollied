@@ -6,11 +6,15 @@ class LineItemTest < ActiveSupport::TestCase
     setup do
       @item = Factory.create(:item)
 
-      @purchase_order = Factory.create(:purchase_order)
+      @order = Factory.create(:order)
       
-      @purchase_order.add(@item)
+      @order.add(@item)
 
-      @line_item = @purchase_order.line_items.first
+      @line_item = @order.line_items.first
+    end
+
+    should "have a user through its order's user" do
+      assert_equal @order.user, @line_item.user
     end
 
     should "have a  description_for_purchasing method" do

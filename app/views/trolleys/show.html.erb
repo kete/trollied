@@ -1,17 +1,16 @@
 <%
-   if current_user == @user
-     @title = t("trolleys.show.your_title")
+   if current_user == @trollied_user
+     @title = t(".your_title")
    else
    # TODO: interpolate user name
    # (means name method has to be implemented for user model)
-     @title = t("trolleys.show.for_user_title")
+     @title = t(".for_user_title", :name => @trollied_user.trolley_user_display_name)
    end
 -%>
 
 <h1><%= @title -%></h1>
 
-<%= render  'pending' -%>
+<% %w(current user_review ready in_process completed).each do |status| -%>
+  <%= render :partial => 'orders', :locals => { :status => status, :trolley => @trolley } -%>
+<% end -%>
 
-<!-- fulfilled purchase orders (i.e. shipped) -->
-
-<!-- received purchase orders  (i.e. delivered) -->

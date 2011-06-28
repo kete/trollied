@@ -1,34 +1,13 @@
-<!-- pending purchase orders, for now all purchase_orders in trolley -->
+<% if @trolley.orders.send("with_state_#{status}".to_sym).size > 0 -%>
 
-<% if @trolley.purchase_orders.size > 0 -%>
-  <% @trolley.purchase_orders.each do |purchase_order| -%>
+  <h2><%= t("trolleys.orders.#{status}") -%></h2>
 
-    <table class="purchase-order">
-      <tr>
-        <th abbr="Item"><%= t 'trolleys.pending.purchasable_item_description' %></th>
-      </tr>
+  <%= render :partial => 'orders/order',
+  :collection => @trolley.orders.send("with_state_#{status}"),
+  :locals => { :trolley => trolley, :status => status } -%>
 
-    <% purchase_order.line_items.each do |line_item| -%>
-      <tr>
-	<td><%= line_item.description_for_purchasing -%></td>
-      </tr>
-    <% end -%>
-
-      <tr>
-      	<td><%= button_to(t('trolleys.pending.clear_all'),
-		{ :controller => :purchase_orders,
-	  :action => :destroy,
-	  :id => purchase_order,
-	  :trolley_id => @trolley },
-	  :confirm => t('trolleys.pending.clear_are_you_sure'),
-	  :method => 'delete',
-	  :class => 'clear-button') -%></td>
-      </tr>
-
-   </table>
-  <% end -%>
-  
-
-<% else -%>
-    <%= t("trolleys.pending.none_pending") %>
+<% elsif status == 'current' -%>
+  <h2><%= t("trolleys.orders.current") -%></h2>
+  <p><%= t("trolleys.orders.none_pending") %></p>
 <% end -%>
+

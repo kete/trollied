@@ -4,6 +4,12 @@ require 'test_helper'
 class OrdersHelperTest < ActionView::TestCase
   context "Helpers for orders" do
 
+    should "respond to button_to event method for an order for all possible events" do
+      Order.workflow_event_names.each do |event_name|
+        assert respond_to?("button_to_#{event_name}")
+      end
+    end
+
     should "have show_count_for method that takes a number and returns formatted string" do
       assert_equal ' (2)', show_count_for(2)
     end
@@ -20,7 +26,7 @@ class OrdersHelperTest < ActionView::TestCase
 
       @state = 'in_process' # default
 
-      html = "<ul id=\"state-links\"><li class=\"state-link first\"><a href=\"/orders?state=cancelled\">#{I18n.t('orders.index.cancelled')} (1)</a></li><li class=\"state-link\"><a href=\"/orders?state=current\">#{I18n.t('orders.index.current')} (1)</a></li><li class=\"state-link\">#{I18n.t('orders.index.in_process')} (1)</li></ul>"
+      html = "<ul id=\"state-links\" class=\"horizontal-list\"><li class=\"state-link first\">#{I18n.t('orders.index.in_process')} (1)</li><li class=\"state-link\"><a href=\"/orders?state=cancelled\">#{I18n.t('orders.index.cancelled')} (1)</a></li><li class=\"state-link\"><a href=\"/orders?state=current\">#{I18n.t('orders.index.current')} (1)</a></li></ul>"
 
       assert_equal html, state_links
     end

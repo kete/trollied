@@ -1,6 +1,85 @@
 = trollied
 
-Description goes here.
+http://en.wiktionary.org/wiki/trollied
+
+Extendable Ruby on Rails engine for adding shopping cart functionality to a Rails application. It does not assume shipping, price, or having a quantity. However, it does allow for more than one order per user placed in a trolley. Meant to be well suited to ordering digital records.
+
+== Requirements
+
+Relies on there being a User model with a corresponding users table and current_user method available to get the user of a current session. Also assumes will_paginate is installed either as a plugin or a gem in your Rails app.
+
+== Set up
+
+Currently only tested against Rails 2.3.5. Feel free to submit a pull request with Rails 3 support.
+
+Install the gem:
+
+  gem install trollied
+
+After installing the gem do the following to your app:
+
+In the Rails::Initializer.run config block in config/environment.rb:
+
+  config.gem "trollied"
+
+Now you need to run the migration generator to add the tables, etc. that Trollied needs to work. Do this in your apps's root directory.
+
+  $ script/generate trollied_migrations
+  $ rake db:migrate # add environment if necessary, i.e. rake db:migrate RAILS_ENV=production
+
+If you are like me and use automatic foreign key constraints, this may fail for the line items migration because of it having a polymorphic. Alter this:
+
+t.integer :purchasable_item_id, :null => false
+
+to
+
+t.integer :purchasable_item_id, :null => false, :references => nil
+
+and rerun the db:migrate command.
+
+Decide which models can be trollied and do the following for each:
+
+class SomeModel < ActiveRecord::Base
+  include GetsTrollied
+  set_up_to_get_trollied :described_as => :the_attribute_that_describes_the_instance_such_as_title_or_name
+end
+
+In your user model, you'll also need to declare it has a trolley:
+
+class User < ActiveRecord::Base
+  include HasTrolley
+end
+
+You'll also need to add a trolley for each existing user in your system (new users are handled automatically). Here's the command that can be run from your console:
+
+User.add_trolleys_for_existing
+
+Next you need to create corresponding nested routes for your controllers and your user account controller. Something like this in config/routes.rb:
+
+
+ActionController::Routing::Routes.draw do |map|
+  map.resources :user do |user|
+    user.resource :trolley, :only => :show do |trolley|
+      trolley.resources :orders, :shallow => true
+    end
+  end
+
+  map.resources :items, :has_many => :line_items
+end
+
+Then you need to adjust any templates that you want the user be able to add an instance of the model to his or her trolley from. Add this method in the template.
+
+link_to_place_in_trolley(@instance_of_model)
+
+Alternatively, you can use this if you want to prevent duplicate orders:
+
+in_trolley_status_or_button_to_place_in_trolley(@instance_of_model)
+
+You'll also need to implement a helper that provides a link to the appropriate profile page for a user.
+
+i.e.:
+
+link_to_profile_for(user)
 
 == Note on Patches/Pull Requests
  

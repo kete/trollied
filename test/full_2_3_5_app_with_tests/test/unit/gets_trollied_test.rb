@@ -11,9 +11,9 @@ class GetsTrolliedTest < ActiveSupport::TestCase
       @trolley = Factory.create(:trolley)
       @item.place_in(@trolley)
 
-      assert @trolley.purchase_order
+      assert @trolley.selected_order
 
-      @purchase_order = @trolley.purchase_order
+      @order = @trolley.selected_order
 
       assert_purchasable_item_matches
     end
