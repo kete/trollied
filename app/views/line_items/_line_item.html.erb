@@ -2,7 +2,7 @@
   <td><%= link_to_purchasable_in(line_item) -%></td>
   <%  if can_delete_line_item?(order) -%>
   <td>
-    <%= link_to t('line_items.line_item.delete'), { :controller => :orders,
+    <%= link_to t('line_items.line_item.delete'), { :controller => :line_items,
     :action => :destroy,
     :id => line_item,
     :order_id => order,
