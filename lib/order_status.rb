@@ -89,7 +89,7 @@ module OrderStatus
 
       def new_note(note)
         # trigger transition to user_review state if note is added to ready or in_process order
-        alter! if !user_review? && note.user != user
+        alter! if in_process? && note.user != user
       end
     end
   end
