@@ -85,7 +85,7 @@ en:
       purchasable_item_description: "Item"
       user: "User:"
     show:
-      your_title: "Your Order"
+      your_order: "Your Order"
       for_user_title: "Order for {{name}}"
     controllers:
       change_to_cancel: "Order Cancelled"
