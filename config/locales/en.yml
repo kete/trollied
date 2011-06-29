@@ -75,6 +75,7 @@ en:
     new:
       create: "Create"
     order:
+      alteration_approve: "Approve changes"
       are_you_sure: "Are you sure?"
       cancel: "Cancel"
       checkout: "Checkout"
