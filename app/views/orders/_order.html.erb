@@ -36,6 +36,12 @@
   </tr>
   <% end -%>
 
+  <% if order.user_review? && current_user == order.user -%>
+  <tr>
+      <td><%= button_to_alteration_approve order -%></td>
+  </tr>
+  <% end -%>
+
 </table>
 
 </fieldset>
