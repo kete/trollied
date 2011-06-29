@@ -7,8 +7,9 @@ module HasTrolleyControllerHelpers
   module UrlFor
     # expects user in options or @user or trolley being set
     def url_for_trolley(options = { })
-      user = options[:user] || @user
-      user = @trolley.user if @trolley && user.blank?
+      user = options[:user]
+      user = @user if @trolley.blank?
+      user = @trolley.user if @trolley
 
       trolley = options[:trolley] || @trolley || user.trolley
 
