@@ -26,4 +26,10 @@ class Order < ActiveRecord::Base
   def may_note?
     in_process? || ready? || user_review?
   end
+
+  # if there are no more line_items or notes, destroy self
+  # i.e. we don't want to keep around empty orders
+  def line_item_destroyed
+    destroy if line_items.size == 0 && notes.size == 0
+  end
 end

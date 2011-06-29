@@ -6,6 +6,10 @@ class LineItem < ActiveRecord::Base
 
   delegate :user, :to => :order
 
+  # this is deprecated in Rails 3x, find workaround
+  # an observer seemed like overkill and would have 3x compatibility stuff todo anyway
+  after_destroy { |record| record.order.line_item_destroyed }
+
   # needs to be unique to orders that are current (but not unique to orders generally)
   # validates_uniqueness_of :order_id, :scope => [:purchasable_item_type, :purchasable_item_id]
   def validate
