@@ -8,10 +8,13 @@ module HasTrolleyControllerHelpers
     # expects user in options or @user or trolley being set
     def url_for_trolley(options = { })
       user = options[:user]
-      user = @user if @trolley.blank?
-      user = @trolley.user if @trolley
-
       trolley = options[:trolley] || @trolley || user.trolley
+
+      if trolley.blank?
+        user = @user
+      else
+        user = trolley.user
+      end
 
       # TODO: Hack, not sure if this is 2.3.5 bug or my ignorance
       # but url_for returns marshalled trolley, in addition to correct url
