@@ -115,7 +115,7 @@ class OrdersController < ApplicationController
    end
 
    # additional actions that correspond to order_status events
-   %w(checkout cancel fulfilled_without_acceptance finish).each do |event|
+   %w(checkout cancel alteration_approve fulfilled_without_acceptance finish).each do |event|
      code = Proc.new { 
        @order.send("#{event}!")
        @trolley ||= @order.trolley
