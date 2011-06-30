@@ -1,12 +1,13 @@
 <tr>
-  <td><%= link_to_purchasable_in(line_item) -%></td>
   <%  if can_delete_line_item?(order) -%>
   <td>
-    <%= link_to t('line_items.line_item.delete'), { :controller => :line_items,
+    <%= button_to t('line_items.line_item.delete'), { :controller => :line_items,
     :action => :destroy,
     :id => line_item,
     :order_id => order,
-    :trolley_id => trolley },
-    :confirm => t('line_items.line_item.are_you_sure'), :method => :delete %></td>
+    :trolley_id => trolley,
+    :confirm => t('line_items.line_item.are_you_sure') }, :method => :delete %>
+  </td>
   <% end -%>
+  <td><%= link_to_purchasable_in(line_item) -%></td>
 </tr>

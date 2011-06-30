@@ -83,6 +83,7 @@ en:
       finish: "Mark as completed"
       fulfilled_without_acceptance: "Mark as ready"
       order_notes: "Notes for this order:"
+      purchasable_item_actions: "Actions"
       purchasable_item_description: "Item"
       user: "User:"
     show:

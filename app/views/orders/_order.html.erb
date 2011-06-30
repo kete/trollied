@@ -8,6 +8,9 @@
 
 <table class="order">
   <tr>
+    <% if order.current? || (order.in_process? && current_user != order.user) -%>
+      <th abbr="Actions for Line Item"><%= t '.purchasable_item_actions' %></th>
+    <% end -%>
     <th abbr="Line Item"><%= t '.purchasable_item_description' %></th>
   </tr>
 
@@ -15,8 +18,8 @@
 
   <% if order.current? -%>
   <tr>
-    <td><%= button_to_checkout order -%></td>
     <td><%= button_to_clear order -%></td>
+    <td><%= button_to_checkout order -%></td>
   </tr>
   <% end -%>
 
