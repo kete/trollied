@@ -11,7 +11,8 @@ class LineItem < ActiveRecord::Base
   after_destroy { |record| record.order.line_item_destroyed }
 
   # needs to be unique to orders that are current (but not unique to orders generally)
-  # validates_uniqueness_of :order_id, :scope => [:purchasable_item_type, :purchasable_item_id]
+  validates_uniqueness_of :order_id, :scope => [:purchasable_item_type, :purchasable_item_id]
+
   def validate
     errors.add(:order, I18n.t('line_item.already_in_order')) if !order.current? && !order.in_process? && order.contains?(purchasable_item)
   end
