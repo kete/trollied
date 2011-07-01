@@ -185,7 +185,7 @@ module OrdersHelper
   def meta_data_for(order)
     html = '<div id="order-meta-data">'
     html += '<h3>' + t('orders.helpers.order_number') + " #{order.id}</h3>"
-    html += '<\div>'
+    html += '</div>'
   end
 
 end
