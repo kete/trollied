@@ -92,7 +92,9 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.xml
   def destroy
-    return_to = if params[:return_to_purchasable_item].present? && params[:return_to_purchasable_item]
+    return_to = if @order && @order.line_items.size > 1
+                  url_for_order
+                elsif params[:return_to_purchasable_item].present? && params[:return_to_purchasable_item]
                   url_for_purchasable_item
                 elsif params[:trolley_id].present?
                   @trolley = Trolley.find(params[:trolley_id])
