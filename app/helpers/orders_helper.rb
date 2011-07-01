@@ -181,4 +181,11 @@ module OrdersHelper
   def url_for_options_for_orders_index
     { :controller => 'orders', :action => 'index' }
   end
+
+  def meta_data_for(order)
+    html = '<div id="order-meta-data">'
+    html += '<h3>' + t('orders.helpers.order_number') + " #{order.id}</h3>"
+    html += '<\div>'
+  end
+
 end

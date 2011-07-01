@@ -2,6 +2,8 @@
 
 <fieldset class="order">
 
+<%= order_meta_data -%>
+
 <% if params[:controller] == 'orders' && !(params[:action] == 'show' && current_user == order.user) -%>
   <h3><%= t '.user' -%> <%= link_to_orders_for(order.user) -%></h3>
 <% end -%>

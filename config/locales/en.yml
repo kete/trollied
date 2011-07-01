@@ -54,6 +54,7 @@ en:
       current_orders: "Current Orders"
       from: "from"
       in_process_orders: "Orders Awaiting processing"
+      order_number: "Order Number:"
       ready_orders: "Ready Orders"
       until: "until"
       user_review_orders: "Orders needing user attention"
