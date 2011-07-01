@@ -30,14 +30,14 @@
   <% end -%>
 
   <% if order.current? -%>
-    <td><%= button_to_clear order -%><%= button_to_checkout order -%></td>
+    <td><%= button_to_checkout order -%><%= button_to_clear order -%></td>
   <% end -%>
 
   <% if order.in_process? -%>
-    <td><%= button_to_cancel order -%>
-      <% if can_trigger_fulfilled_without_acceptance? -%>
-        <%= button_to_fulfilled_without_acceptance order -%>
+    <td><% if can_trigger_fulfilled_without_acceptance? -%>
+      <%= button_to_fulfilled_without_acceptance order -%>
       <% end -%>
+      <%= button_to_cancel order -%>
     </td>
   <% end -%>
 
