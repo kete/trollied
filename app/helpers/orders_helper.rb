@@ -25,7 +25,7 @@ module OrdersHelper
 
   def order_button_for(action, order)
     options = { :confirm => t('orders.order.are_you_sure'),
-      :class => 'order-button' }
+      :class => "order-button button-#{action}" }
 
     options[:method] = 'delete' if action.to_s == 'destroy'
 
