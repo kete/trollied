@@ -19,14 +19,14 @@
   <%= render :partial => 'line_items/line_item', :collection => order.line_items, :locals => { :order => order, :trolley => trolley } -%>
 
   <% if order.current? -%>
-  <tr>
+  <tr class="order-buttons">
     <td><%= button_to_clear order -%></td>
     <td><%= button_to_checkout order -%></td>
   </tr>
   <% end -%>
 
   <% if order.in_process? -%>
-  <tr>
+  <tr class="order-buttons">
     <td><%= button_to_cancel order -%></td>
   
     <% if can_trigger_fulfilled_without_acceptance? -%>
@@ -36,13 +36,13 @@
   <% end -%>
 
   <% if order.ready? && can_trigger_finish? -%>
-  <tr>
+  <tr class="order-buttons">
       <td><%= button_to_finish order -%></td>
   </tr>
   <% end -%>
 
   <% if order.user_review? && current_user == order.user -%>
-  <tr>
+  <tr class="order-buttons">
       <td><%= button_to_alteration_approve order -%></td>
   </tr>
   <% end -%>
