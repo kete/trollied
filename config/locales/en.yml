@@ -83,6 +83,7 @@ en:
       destroy: "Clear all"
       finish: "Mark as completed"
       fulfilled_without_acceptance: "Mark as ready"
+      order_controls_preface: "Order actions:"
       order_notes: "Notes for this order:"
       purchasable_item_actions: "Actions"
       purchasable_item_description: "Item"
