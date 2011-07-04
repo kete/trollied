@@ -94,7 +94,9 @@ class LineItemsController < ApplicationController
   def destroy
     return_to = if @order && @order.line_items.size > 1
                   url_for_order_or_trolley
-                elsif params[:return_to_purchasable_item].present? && params[:return_to_purchasable_item]
+                elsif params[:return_to_purchasable_item].present? &&
+                    (params[:return_to_purchasable_item] == true.to_s ||
+                     params[:return_to_purchasable_item] == true)
                   url_for_purchasable_item
                 elsif params[:trolley_id].present?
                   @trolley = Trolley.find(params[:trolley_id])
