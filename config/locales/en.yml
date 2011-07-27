@@ -39,6 +39,10 @@ en:
       add_note_to_order_for_admin: "Add a note about this order for staff."
       add_note_to_order_for_user: "Add a note about this order for the owner."
   orders:
+    checkout_form:
+      confirm: "Confirm Checkout"
+      confirm_order: "Confirm order details"
+      additional_info_for_order: "Anything else you would like to tell us about this order?"
     edit:
       update: "Update"
     date_pickers:
@@ -54,7 +58,8 @@ en:
       current_orders: "Current Orders"
       from: "from"
       in_process_orders: "Orders Awaiting processing"
-      order_number: "Order Number:"
+      items: "items"
+      order_number: "Order:"
       ready_orders: "Ready Orders"
       until: "until"
       user_review_orders: "Orders needing user attention"
@@ -96,6 +101,7 @@ en:
       change_to_checkout: "Order Checked Out"
       change_to_finish: "Order Completed"
       change_to_fulfilled_without_acceptance: "Order Ready"
+      change_to_alteration_approve: "You approved the changes to the order. It is now back in process."
       created: "Created order"
       updated: "Updated order"
       deleted: "Deleted order"
