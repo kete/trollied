@@ -23,8 +23,9 @@ class OrdersController < ApplicationController
      @conditions = set_up_conditions_based_on_params
 
      options = { :page => params[:page],
-       :per_page => 5,
-       :conditions => @conditions }
+       :per_page => number_per_page,
+       :conditions => @conditions, 
+       :order => 'updated_at DESC'}
 
      @orders = Order.paginate(options)
 
@@ -114,10 +115,35 @@ class OrdersController < ApplicationController
      end
    end
 
+   # optional checkout form
+   # that can be used for simple per order settings or allowing the user to add a note
+   def checkout_form
+     set_defaults_for_order_checkout
+     @order.notes.build unless @order.notes.any?
+   end
+
+   def checkout
+     respond_to do |format|
+       if checkout_order_including_note
+         @trolley ||= @order.trolley
+         flash[:notice] = t("orders.controllers.change_to_checkout")
+         format.html { redirect_to url_for_trolley }
+       else
+         # display errors
+         format.html { render :action => "checkout_form" }
+       end
+     end
+   end
+
    # additional actions that correspond to order_status events
-   %w(checkout cancel alteration_approve fulfilled_without_acceptance finish).each do |event|
+   %w(cancel alteration_approve fulfilled_without_acceptance finish).each do |event|
      code = Proc.new { 
-       @order.send("#{event}!")
+       if event == 'cancel'
+         @order.send("#{event}!", current_user)
+       else
+         @order.send("#{event}!")
+       end
+
        @trolley ||= @order.trolley
 
        flash[:notice] = t("orders.controllers.change_to_#{event}")
@@ -170,7 +196,7 @@ class OrdersController < ApplicationController
          operator = ">="
          operator = "<=" if name == :until
 
-         clauses_array << "created_at #{operator} :#{name}"
+         clauses_array << "updated_at #{operator} :#{name}"
          clauses_hash[name] = value
        rescue
          instance_variable_set(var_name, nil)
@@ -206,5 +232,35 @@ class OrdersController < ApplicationController
                     [conditions_clauses.join(" AND "), conditions_hash]
                   end
      
+   end
+
+   # override this if your additional attributes need calculation for defaults at checkout
+   def set_defaults_for_order_checkout
+   end
+
+   def checkout_order_including_note
+     # skip alerting the order (triggering a duplicate notification) that a new_note has been added
+     # assumes only one note in form
+     if params[:order][:notes_attributes].present?
+       params[:order][:notes_attributes]["0"][:do_not_alert_order] = true
+
+       if params[:order][:notes_attributes]["0"][:body].blank?
+         # don't add empty note
+         params[:order].delete(:notes_attributes)
+       end
+     end
+
+     # this will add note and any attributes you have in the checkout form for order
+     success = @order.update_attributes(params[:order])
+
+     if success
+       # we have to call checkout! separately to trigger event notifications
+       @order.checkout!
+     end
+     success
+   end
+
+   def number_per_page
+     15
    end
 end

@@ -1,5 +1,5 @@
 <tr>
-  <%  if can_delete_line_item?(order) -%>
+  <%  if can_delete_line_item?(order) && !params[:action].include?('checkout') -%>
   <td>
     <%= button_to t('line_items.line_item.delete'), { :controller => :line_items,
     :action => :destroy,

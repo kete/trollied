@@ -6,10 +6,12 @@ class Note < ActiveRecord::Base
 
   after_create :alert_order
 
+  attr_accessor :do_not_alert_order
+
   private
   
   def alert_order
-    order.new_note(self)
+    order.new_note(self) unless do_not_alert_order
   end
 end
 

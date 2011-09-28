@@ -62,7 +62,7 @@ module OrderStatus
       # create a named_scope for each of our declared states
       workflow_spec.state_names.each do |name|
         scope_name = "with_state_#{name}".to_sym
-        named_scope scope_name, :conditions => { :workflow_state => name.to_s }
+        named_scope scope_name, :conditions => { :workflow_state => name.to_s }, :order => 'updated_at DESC'
       end
 
       # in(state_name)

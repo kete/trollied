@@ -9,7 +9,7 @@ class TrolleysController < ApplicationController
   # list orders
   def show
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
     end
   end
   

@@ -9,9 +9,10 @@ module OrdersHelper
   end
 
   def can_delete_line_item?(order)
-    (params[:controller] == 'orders' &&
-     order.workflow_state == 'in_process') ||
-      order.state_ok_to_delete_line_item?
+    order.state_ok_to_delete_line_item? &&
+      (order.user != current_user &&
+       order.in_process?) ||
+      order.current?
   end
 
   # override the method can_trigger_...? methods with your own security checks
@@ -23,16 +24,22 @@ module OrdersHelper
     params[:controller] == 'orders'
   end
 
-  def order_button_for(action, order)
-    options = { :confirm => t('orders.order.are_you_sure'),
-      :class => "order-button button-#{action}" }
+  def order_button_for(action, order, options = {})
+    options = options.merge({ :confirm => t('orders.order.are_you_sure'),
+                              :class => "order-button button-#{action}" })
 
     options[:method] = 'delete' if action.to_s == 'destroy'
 
+    target_action = options.delete(:target_action) || action
+
+    url_for_options = { :controller => :orders,
+                :action => target_action,
+                :id => order }
+
+    url_for_options = url_for_options.merge(options.delete(:url_for_options)) if options[:url_for_options]
+
     button_to(t("orders.order.#{action}"),
-              { :controller => :orders,
-                :action => action,
-                :id => order },
+              url_for_options,
               options)
   end
 
@@ -64,6 +71,10 @@ module OrdersHelper
                            :until => @until)
   end
 
+  def sorted_state_names
+    Order.workflow_spec.state_names.sort_by { |s| I18n.t("orders.index.#{s.to_s}") }
+  end
+
   # returns a list of links to order states
   # that have orders in their state
   # with number of orders in a given state indicated
@@ -72,7 +83,7 @@ module OrdersHelper
 
     states_count = 1
 
-    states = Order.workflow_spec.state_names.sort_by { |s| I18n.t("orders.index.#{s.to_s}") }
+    states = sorted_state_names
 
     states.each do |state|
       adjusted_conditions = adjust_value_in_conditions_for(:workflow_state, state.to_s, @conditions)
@@ -188,4 +199,22 @@ module OrdersHelper
     html += '</div>'
   end
 
+  # override this in your app to add your own fields at checkout
+  def order_checkout_fields(form)
+  end
+
+  # order number
+  # order user
+  # number of line_items
+  def link_to_as_summary_of(order, user = nil)
+    link_text = t('orders.helpers.order_number') + " #{order.id}"
+    link_text += " - #{user.trolley_user_display_name}" if user
+    link_text += " - (#{order.line_items.size} #{t 'orders.helpers.items'})" if order.line_items.size > 0
+
+    link_to(link_text, url_for_order(:order => order))
+  end
+  
+  def checkout_form_target_action_url_hash
+    {:action => 'checkout', :id => @order}
+  end
 end

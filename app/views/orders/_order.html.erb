@@ -4,13 +4,13 @@
 
 <%= meta_data_for(order) -%>
 
-<% if params[:controller] == 'orders' && !(params[:action] == 'show' && current_user == order.user) -%>
+<% if current_user != order.user && params[:controller] == 'orders'  -%>
   <h3><%= t '.user' -%> <%= link_to_orders_for(order.user) -%></h3>
 <% end -%>
 
 <table class="order">
   <tr>
-    <% if order.current? || (order.in_process? && current_user != order.user) -%>
+    <% if (order.current? && params[:action] != 'checkout_form') || (order.in_process? && current_user != order.user) -%>
       <th abbr="Actions for Line Item"><%= t '.purchasable_item_actions' %></th>
     <% end -%>
     <th abbr="Line Item"><%= t '.purchasable_item_description' %></th>
@@ -19,17 +19,18 @@
   <%= render :partial => 'line_items/line_item', :collection => order.line_items, :locals => { :order => order, :trolley => trolley } -%>
 
 
-  <% show_order_buttons = order.current? ||
+  <% show_order_buttons = params[:action] != 'checkout_form' &&
+     (order.current? ||
      order.in_process? ||
      (order.ready? && can_trigger_finish?) ||
-     (order.user_review? && current_user == order.user) -%>
+     (order.user_review? && current_user == order.user)) -%>
 
   <% if show_order_buttons -%>
     <tr class="order-buttons">
       <td><%= t '.order_controls_preface' -%></td>
   <% end -%>
 
-  <% if order.current? -%>
+  <% if order.current? && params[:action] != 'checkout_form' -%>
     <td><%= button_to_checkout order -%><%= button_to_clear order -%></td>
   <% end -%>
 
@@ -57,6 +58,7 @@
 
 </fieldset>
 
+<% if params[:action] != 'checkout_form' -%>
 <% if  order.notes.size != 0 -%>
 <h3><%= t('.order_notes')  -%></h3>
  <% end -%>
@@ -68,3 +70,5 @@
 </ul>
 
 <%= render :partial => 'notes/new', :locals => { :order => order,  :user => current_user } if order.may_note? -%>
+
+<% end -%>

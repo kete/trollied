@@ -1,6 +1,6 @@
 module HasTrolleyControllerHelpers
   def self.included(klass)
-    klass.send :helper_method, :url_for_trolley
+    klass.send :helper_method, :url_for_trolley, :url_for_order
     klass.send :include, UrlFor
   end
   
@@ -30,7 +30,8 @@ module HasTrolleyControllerHelpers
       trolley = @order.trolley if @order && trolley.blank?
 
       order = options[:order] || @order || trolley.selected_order
-      
+      trolley = order.trolley
+
       url_for [trolley.user, trolley, order]
     end
 

@@ -12,9 +12,9 @@
 <% if @orders.size > 0 -%>
 
   <h2><%= orders_state_headline -%><%= clear_extra_params -%></h2>
-
-  <%= render :partial => 'orders/order', :collection => @orders, :locals => { :trolley => @trolley, :status => @state } -%>
-  
+  <ul id="order-summaries-list">
+    <%= render :partial => 'orders/order_summary', :collection => @orders, :locals => { :trolley => @trolley, :status => @state } -%>
+  </ul>
   <div id="prev-next"><%= will_paginate @orders, :params => params %></div>
 <% else -%>
   <p><%= t("orders.index.no_orders") %></p>

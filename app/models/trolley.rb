@@ -10,7 +10,6 @@ class Trolley < ActiveRecord::Base
     orders[index] || orders.create!
   end
 
-  # TODO: STUB: implement way to determine
   # correct order given an purchasable_item
   def correct_order(purchasable_item)
     orders.with_state_current.first || orders.create!
@@ -25,7 +24,6 @@ class Trolley < ActiveRecord::Base
   end
 
   # do any of this trolley's orders contain the purchasable_item?
-  # TODO: when status is added to orders, limit by option for checking status
   def contains?(purchasable_item, state = nil)
     within_orders = state ? orders.send("with_state_#{state}") : orders
 

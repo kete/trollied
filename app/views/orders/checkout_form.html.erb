@@ -6,7 +6,7 @@
 
 <%= render @order -%>
 
-<% form_for(@order, :action => 'checkout') do |f| %>
+<% form_for(@order, :url => checkout_form_target_action_url_hash, :html => {:method => 'post'} ) do |f| %>
 
 <%= f.error_messages %>
 
@@ -32,3 +32,4 @@
 
 <%= f.submit @button_text %>
 <% end %>
+

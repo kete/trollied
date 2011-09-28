@@ -1,0 +1,3 @@
+<% trolley ||= order_summary.trolley -%>
+<li class="order-summary" id="order-summary-<%= order_summary.id -%>"><%= link_to_as_summary_of(order_summary, trolley.user) -%></li>
+

@@ -2,10 +2,15 @@
 
   <h2><%= t("trolleys.orders.#{status}") -%></h2>
 
-  <%= render :partial => 'orders/order',
-  :collection => @trolley.orders.send("with_state_#{status}"),
-  :locals => { :trolley => trolley, :status => status } -%>
-
+  <% if status == 'current' -%>
+    <%= render :partial => 'orders/order',
+    :collection => @trolley.orders.send("with_state_#{status}"),
+    :locals => { :trolley => trolley, :status => status } -%>
+  <% else -%>
+    <ul id="order-summaries-list">
+      <%= render :partial => 'orders/order_summary', :collection => @trolley.orders.send("with_state_#{status}"), :locals => { :trolley => @trolley, :status => status } -%>
+    </ul>
+  <% end -%>
 <% elsif status == 'current' -%>
   <h2><%= t("trolleys.orders.current") -%></h2>
   <p><%= t("trolleys.orders.none_pending") %></p>
