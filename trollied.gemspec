@@ -1,11 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'trollied/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "trollied"
-  spec.version       = Trollied::VERSION
+  spec.version       = File.exist?('VERSION') ? File.read('VERSION') : ""
   spec.authors       = ["Walter McGinnis"]
   spec.email         = ["wm@waltermcginnis.com"]
   spec.summary       = %Q{Extendable Ruby on Rails engine for adding shopping cart functionality to a Rails application. It does not assume shipping, price, or having a quantity.}
