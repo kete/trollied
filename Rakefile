@@ -10,7 +10,7 @@ begin
     gem.email = "walter@katipo.co.nz"
     gem.homepage = "http://github.com/kete/trollied"
     gem.authors = ["Walter McGinnis"]
-    gem.add_dependency "workflow", ">= 0.8.0"
+    gem.add_dependency "workflow", "1.0.0"
     gem.add_dependency "will_paginate", "<= 2.3.15"
     gem.add_development_dependency "shoulda", ">= 2.10.3"
     gem.add_development_dependency "factory_girl", "= 1.2.3"
